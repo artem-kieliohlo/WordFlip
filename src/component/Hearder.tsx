@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import { Link, Route, Routes } from "react-router";
 
-const Hearder = () => {
+const Header = () => {
   return (
-    <div>Hearder</div>
-  )
-}
+    <div>
+      Word Flip
+      <nav>
+        <Link to="/word-list">word-list</Link>
+        <Link to="/flash-cards">flash-cards</Link>
+        <Link to="/repeat-words">repeat-words</Link>
+      </nav>
+    </div>
+  );
+};
 
-export default Hearder
+export default Header;
