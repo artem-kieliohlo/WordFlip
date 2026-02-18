@@ -1,15 +1,21 @@
-import Hearder from './component/Hearder'
-import MainContent from './component/MainContent'
+import { Route, Routes } from "react-router";
+import Header from "./component/Hearder";
+import WordList from "./component/WordList";
+import FlashCards from "./component/FlashCards";
+import RepeatWords from "./component/RepeatWords";
 
 function App() {
-  
-
   return (
     <>
-      <Hearder />
-      <MainContent />
+      <Header />
+
+      <Routes>
+        <Route path="/word-list" element={<WordList />} />
+        <Route path="/flash-cards" element={<FlashCards />} />
+        <Route path="/repeat-words" element={<RepeatWords />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
