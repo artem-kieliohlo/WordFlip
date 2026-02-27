@@ -5,47 +5,19 @@ import type { RootState } from "../../store";
 import "./FlipForm.css";
 import { Button, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useGetAudioQuery } from "../../dictionaryApi";
 
 const FlipForm = () => {
   const cardState: WordCardState = useSelector(
     (state: RootState) => state.cards,
   );
   const dispatch = useDispatch();
+  
 
   const [newWord, setNewWord] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
-  const [loadingAudio, setLoadingAudio] = useState(false);
 
-  /**
-   * Запрашивает словарь api и возвращает ссылку на аудио, если он есть
-   */
-  const fetchAudioForWord = async (word: string): Promise<string | undefined> => {
-    if (!word) return undefined;
-    setLoadingAudio(true);
-    try {
-      const res = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(
-          word,
-        )}`,
-      );
-      if (!res.ok) return undefined;
-      const data = (await res.json()) as any[];
-      for (const entry of data) {
-        if (entry.phonetics && Array.isArray(entry.phonetics)) {
-          for (const ph of entry.phonetics) {
-            if (ph && typeof ph.audio === "string" && ph.audio.length) {
-              return ph.audio;
-            }
-          }
-        }
-      }
-    } catch (err) {
-      console.warn("fetchAudioForWord error", err);
-    } finally {
-      setLoadingAudio(false);
-    }
-    return undefined;
-  };
+  const { data: audioUrl, isError } = useGetAudioQuery(newWord);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,25 +28,24 @@ const FlipForm = () => {
     if (cardState.cards.find((el) => el.word === newWord)) {
       return;
     }
-    // получаем аудио (если получится) до отправки
-    fetchAudioForWord(newWord).then((audioUrl) => {
-      dispatch(
-        addCard({
-          word: newWord,
-          translation: newTranslation,
-          forgotten: false,
-          audioUrl,
-        }),
-      );
-      // очистим форму независимого от результата запроса аудио
-      setNewWord("");
-      setNewTranslation("");
-    });
+
+    const audio:string = audioUrl[0].phonetics?.find(
+      (el) => el.audio !== "",
+    ).audio ;
+    dispatch(
+      addCard({
+        word: newWord,
+        translation: newTranslation,
+        forgotten: false,
+        audioUrl: audio,
+      }),
+    );
+    setNewWord("");
+    setNewTranslation("");
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <label htmlFor="word">word</label> */}
       <TextField
         id="word"
         label="Word"
@@ -91,7 +62,7 @@ const FlipForm = () => {
         onChange={(e) => setNewTranslation(e.target.value)}
       />
 
-      {loadingAudio && <div className="loadingAudio">Loading pronunciation…</div>}
+      {isError && <div className="loadingAudio">Такое слово не известно</div>}
 
       <Button variant="contained" type="submit">
         {" "}
@@ -101,6 +72,5 @@ const FlipForm = () => {
     </form>
   );
 };
-
 
 export default FlipForm;

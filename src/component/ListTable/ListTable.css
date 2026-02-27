@@ -22,3 +22,22 @@ thead {
     background-color: #55608f;
   }
 }
+
+.volume-icon {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+  transition: transform 150ms ease, color 150ms ease, box-shadow 150ms ease;
+  vertical-align: middle;
+  display: inline-flex;
+}
+.volume-icon:hover {
+  transform: scale(1.12);
+  color: #ffd54f;
+}
+.volume-icon:active {
+  transform: scale(0.98);
+}
+.volume-icon:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 213, 79, 0.18);
+}

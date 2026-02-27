@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import {
@@ -16,6 +16,7 @@ const FlashCards = () => {
   const activeCards: WordCard[] = cardState.cards.filter((el) => !el.forgotten);
 
   const dispatch = useDispatch();
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isTranslationVisible, setTranslationVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isForgetDisabled, setForgetDisabled] = useState(true);
@@ -34,6 +35,9 @@ const FlashCards = () => {
   const handleShowTranslation = () => {
     setTranslationVisible(true);
     setForgetDisabled(false);
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
   };
 
   const handleMarkForgotten = () => {
@@ -70,13 +74,7 @@ const FlashCards = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    isTranslationVisible,
-    isForgetDisabled,
-    activeCards,
-    currentIndex,
-    dispatch,
-  ]);
+  }, []);
 
   return (
     <div className="flashCardsContainer">
@@ -91,8 +89,8 @@ const FlashCards = () => {
               </div>
               {activeCards[currentIndex]?.audioUrl && (
                 <audio
-                  className="cardAudio"
-                  controls
+                  ref={audioRef}
+                  style={{ display: "none" }}
                   src={activeCards[currentIndex]?.audioUrl}
                   preload="none"
                 >

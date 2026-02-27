@@ -5,7 +5,6 @@ export type WordCard = {
   word: string;
   translation: string;
   forgotten: boolean;
-  // ссылка на аудиофайл произношения слова (может отсутствовать)
   audioUrl?: string;
 };
 
@@ -22,23 +21,19 @@ export const wordCardsSlice = createSlice({
   initialState,
   reducers: {
     addCard(state, action) {
-      // payload может содержать audioUrl, просто сохраняем
       state.cards.push(action.payload);
-      // сохраняем актуальный массив во избежание потери при обновлении
-      //Стоит позже исправить для избегания совершения сайд эфектов в редусере
+      
       try {
         saveWordCards(state);
       } catch {
         // ignore ошибки записи
       }
     },
+
     forgetCard(state, action) {
-      
       const entry = state.cards.find((el) => el.word === action.payload.word);
-      
       if (entry) {
         entry.forgotten = true;
-        
         try {
           saveWordCards(state);
         } catch {
@@ -46,6 +41,7 @@ export const wordCardsSlice = createSlice({
         }
       }
     },
+
     repeated(state) {
       state.cards.map(el => el.forgotten = false)
       saveWordCards(state)
