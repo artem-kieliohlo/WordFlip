@@ -1,0 +1,33 @@
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  background-color: cornflowerblue;
+  padding: 10px;
+}
+
+.logo {
+  width: 70px;
+  border-radius: 15px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+.headerLink {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.activeLink {
+  color: rgb(116, 225, 99);
+  text-decoration: none;
+  font-size: 20px;
+}
+.activeLink:hover {
+  text-decoration: none;
+  /* cursor: none; */
+}

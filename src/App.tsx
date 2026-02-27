@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router";
-import Header from "./component/Hearder";
-import WordList from "./component/WordList";
+import Header from "./component/Header/Header";
+import WordList from "./component/WordList/WordList";
 import FlashCards from "./component/FlashCards";
 import RepeatWords from "./component/RepeatWords";
 
