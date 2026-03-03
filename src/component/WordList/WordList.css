@@ -1,0 +1,13 @@
+#WordList {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-around;
+  align-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+#WordList > * {
+  flex-basis: 450px;
+}
